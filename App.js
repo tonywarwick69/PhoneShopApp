@@ -6,6 +6,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './components/Home'
 import Details from './components/Details';
+import CartView from './components/CartView';
+import  EditCart  from './components/EditCart';
+
 const Stack = createNativeStackNavigator();
 const MyApp = () => {
 
@@ -17,6 +20,8 @@ const MyApp = () => {
           component={HomeScreen}
           options={{ title: 'Home' }}/>
          <Stack.Screen name="Details" component={Details} />
+         <Stack.Screen name="CartView" component={CartView} />
+         <Stack.Screen name="EditCart" component={EditCart} />
       </Stack.Navigator>
     </NavigationContainer>
    

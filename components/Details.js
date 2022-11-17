@@ -1,12 +1,27 @@
 import  React from 'react'
 import {View, Button,Text,StyleSheet,TouchableOpacity,Image} from 'react-native'
+import axios from 'axios';
 
  const Details = ({navigation,route}) => {
   const { item } = route.params;
+  const handleSubmitData = (item) =>{
+    console.log('check value:',item);
+    axios.post('https://6347859cdb76843976acdaff.mockapi.io/api/buoi07/cartItem',{
+      "name":`${item.name}`,
+      "price":`${item.price}`,
+      "avatar":`${item.avatar}`,
+      
+    }).then((response)=>{
+      console.log("Here's what you upload: ",response.data)
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
   return (
     <View style={styles.container}>
       <View style={styles.itemStyle}>
-        <TouchableOpacity style={styles.resultList} key={item.id}  onPress={()=> navigation.navigate('Details',item)}>
+        <View style={styles.resultList} key={item.id}  onPress={()=> navigation.navigate('Details',item)}>
         <View style={styles.leftList}>
         <Text style={{fontSize:25}}>{item.id}.</Text>
         <Text style={{fontSize:25}}> {item.name}</Text>
@@ -14,7 +29,7 @@ import {View, Button,Text,StyleSheet,TouchableOpacity,Image} from 'react-native'
         style={styles.bigLogo}
         source={{uri:item.avatar }}></Image>
         </View>
-        </TouchableOpacity>
+        </View>
        
       </View>
     <View style={styles.lines}>
@@ -24,7 +39,7 @@ import {View, Button,Text,StyleSheet,TouchableOpacity,Image} from 'react-native'
         
       <View style={styles.bottom}>
         <Text style={{fontSize:25}}> ${item.price}</Text>
-        <TouchableOpacity style={styles.buttonStyle}>
+        <TouchableOpacity style={styles.buttonStyle} onPress={()=>handleSubmitData(item)}>
         <Image
             style={styles.tinyLogo}
             source={require('../assets/v.png')}
@@ -32,7 +47,9 @@ import {View, Button,Text,StyleSheet,TouchableOpacity,Image} from 'react-native'
           <Text style={styles.textStyle}>Add to cart</Text>
         </TouchableOpacity>
       </View>
-  
+      <TouchableOpacity onPress={()=> navigation.navigate('CartView')}>
+        <Text>CHECK CART</Text>
+      </TouchableOpacity>
 </View>
   )
 }

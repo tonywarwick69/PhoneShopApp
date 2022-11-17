@@ -5,8 +5,9 @@ import filter from 'lodash.filter';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
+import { MaterialIcons } from '@expo/vector-icons';
 
- const Home = ({navigation, route}) => {
+ const CartView = ({navigation,route}) => {
   //if loaded show data else show loading circle
   const [isLoading,setLoading]=useState(true);
   //declare data as array[]
@@ -50,7 +51,7 @@ import axios from 'axios';
   //
   const fetchData = ()=>{
    try {
-    const apiURL = 'https://6347859cdb76843976acdaff.mockapi.io/api/buoi07/bag';
+    const apiURL = 'https://6347859cdb76843976acdaff.mockapi.io/api/buoi07/cartItem';
     fetch(apiURL)
     .then((response) => response.json())
     .then((responseJson)=>{
@@ -90,8 +91,18 @@ const searchFilter = (text) =>{
   }
 }
  
- //clear TextInput after press Save
-
+ 
+  //delete
+  const onDelete = (id) =>{
+    axios.delete(`https://6347859cdb76843976acdaff.mockapi.io/api/buoi07/cartItem/${id}`)
+    .then((response)=>{
+      console.log(`List after delete id ${id}: `,response.data)
+      
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
 
  return (
    
@@ -111,8 +122,8 @@ const searchFilter = (text) =>{
        <TouchableOpacity>
          <Text>BACKPACKS</Text>
        </TouchableOpacity>
-       <TouchableOpacity onPress={()=> navigation.navigate('CartView')}>
-         <Text>CHECK CART</Text>
+       <TouchableOpacity>
+         <Text>VIEW CART</Text>
        </TouchableOpacity>
        <TouchableOpacity>
          <Text>LUGGAGES</Text>
@@ -125,7 +136,7 @@ const searchFilter = (text) =>{
          keyExtractor={(index,item) => item.id}
          renderItem={({item})=>(
            <View>
-                   <TouchableOpacity style={styles.buttonStyle} key={item.id}  onPress={()=> navigation.navigate('Details',{item: item})}>
+            <TouchableOpacity style={styles.buttonStyle} key={item.id}  onPress={()=> navigation.navigate('EditCart',{item: item})}>
              <View style={styles.leftList}>
                <Text style={{fontSize:25}}>{item.id}.</Text>
                <Text style={{fontSize:25}}> {item.name}</Text>
@@ -134,7 +145,7 @@ const searchFilter = (text) =>{
                <Image
        style={styles.tinyLogo}
        source={{uri:item.avatar }}></Image>
-              
+              <MaterialIcons name="delete-forever" size={24} color="black" onPress={()=>{onDelete(item.id)}}/>
              </View>
            </TouchableOpacity>
            </View>
@@ -175,4 +186,4 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#fff'},
   });
-export default Home;
+export default CartView;
